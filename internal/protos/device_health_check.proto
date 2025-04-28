@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package webrtc;
+
+option go_package = "internal/protos";
+
+message DeviceCapabilities {
+  bool audio = 1;
+  bool video = 2;
+}
+
+message DeviceHealthCheckBody {
+  string device_id = 1;
+  DeviceCapabilities capabilities = 2;
+  string room_id = 3;
+  bool health_check = 4;
+}

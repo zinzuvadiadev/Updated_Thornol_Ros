@@ -1,0 +1,14 @@
+syntax="proto3";
+
+package webrtc;
+
+option go_package = "github.com/golain-io/protos";
+
+
+message DeviceConnectionBody{
+    string token=1;
+    string url=2; 
+    string room_id=3;
+    string device_id=4;
+
+}

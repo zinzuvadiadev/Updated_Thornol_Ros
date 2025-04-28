@@ -1,0 +1,48 @@
+name: Build and Upload Go Binary to Cloudflare R2
+
+on:
+  push:
+    branches:
+      - scogo-openwrt-armv6
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.22' # Specify the Go version
+
+    - name: Build binary for MIPS inside Docker
+      run: |
+        docker build -t thornol-docker .
+
+    - name: copy binary from docker container
+      run: |
+        docker container create --name temp thornol-docker
+        docker container cp temp:/src/thornol_app ./
+        docker container rm temp
+
+    - name: Install rclone
+      run: curl https://rclone.org/install.sh | sudo bash
+
+    - name: Upload binary to Cloudflare R2
+      env:
+        R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+        R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        R2_BUCKET_NAME: ${{ secrets.R2_BUCKET }}
+        R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      run: |
+        echo "[r2]
+        type = s3
+        provider = Other
+        access_key_id = ${R2_ACCESS_KEY_ID}
+        secret_access_key = ${R2_SECRET_ACCESS_KEY}
+        endpoint = ${R2_ENDPOINT}
+        acl = private" > rclone.conf
+        rclone copy ./thornol_app r2:${R2_BUCKET_NAME} --config rclone.conf

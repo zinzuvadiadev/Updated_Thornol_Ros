@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package navstack;
+option go_package = "internal/protos";
+
+service ThornolDefaultService {
+  rpc GetProcessStatus(GetProcessStatusRequest) returns (GetProcessStatusResponse) {}
+  rpc NewMethod(NewMethodRequest) returns (NewMethodResponse) {}
+
+
+  // RunNavStack copies map files and launches the navigation stack
+  rpc RunNavStack(RunNavStackRequest) returns (RunNavStackResponse) {}
+  rpc RunSlamToolbox(RunSlamToolboxRequest) returns (RunSlamToolboxResponse) {}
+  rpc RunCartographer(RunCartographerRequest) returns (RunCartographerResponse) {}
+
+  rpc StopNavStack(StopNavStackRequest) returns (StopNavStackResponse) {}
+  rpc StopSlamToolbox(StopSlamToolboxRequest) returns (StopSlamToolboxResponse) {}
+  rpc StopCartographer(StopCartographerRequest) returns (StopCartographerResponse) {}
+}
+
+message RunNavStackRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message RunNavStackResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message RunSlamToolboxRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message RunSlamToolboxResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message RunCartographerRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message RunCartographerResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message StopNavStackRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message StopNavStackResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message StopSlamToolboxRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message StopSlamToolboxResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message StopCartographerRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message StopCartographerResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message GetProcessStatusRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message GetProcessStatusResponse {
+  bool navStackRunning = 1;
+  bool slamToolboxRunning = 2;
+  bool cartographerRunning = 3;
+}
+
+message NewMethodRequest {
+  // Add any parameters you might want to pass in future
+}
+
+message NewMethodResponse {
+  repeated bool processStatuses = 1;
+}

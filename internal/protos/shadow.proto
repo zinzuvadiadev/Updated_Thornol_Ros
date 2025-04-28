@@ -1,0 +1,106 @@
+syntax = "proto3";
+option go_package= "internal/protos";
+
+enum SSH_ENABLE {
+	DISABLE = 0;
+	ENABLE = 1;
+}
+
+enum CONTROL_MODE {
+	MANUAL = 0;
+	AUTO = 1;
+}
+
+enum MissionRunType {
+  MISSION_RUN_TYPE_UNSPECIFIED = 0;
+  MISSION_RUN_TYPE_IMMEDIATE = 1;
+  MISSION_RUN_TYPE_RECURRING = 2;
+}
+
+enum MissionStatus {
+  MISSION_STATUS_UNSPECIFIED = 0;
+  MISSION_STATUS_PENDING = 1;
+  MISSION_STATUS_IN_PROGRESS = 2;
+  MISSION_STATUS_COMPLETED = 3;
+  MISSION_STATUS_FAILED = 4;
+  MISSION_STATUS_CANCELLED = 5;
+  MISSION_STATUS_SKIPPED_CLIENT_OFFLINE = 6;
+}
+
+enum DayOfWeek {
+  DAY_UNSPECIFIED = 0;
+  SUNDAY = 1;
+  MONDAY = 2;
+  TUESDAY = 3;
+  WEDNESDAY = 4;
+  THURSDAY = 5;
+  FRIDAY = 6;
+  SATURDAY = 7;
+}
+
+message TimeOfDay {
+  int32 hours = 1;
+  int32 minutes = 2;
+}
+
+message WeeklySchedule {
+  repeated DayOfWeek days = 1;
+  TimeOfDay time = 2;
+}
+
+message RecurringConfig {
+  oneof schedule_type {
+    WeeklySchedule weekly = 1;
+  }
+}
+
+message MissionSchedule {
+  string mission_id = 1;
+  string collection_id = 2;
+  MissionRunType run_type = 3;
+  RecurringConfig recurring = 4;
+  
+  string created_by = 5;
+  string created_at = 6;
+  string last_executed_at = 7;
+  MissionStatus status = 8;
+  string next_run_time = 9;
+}
+
+message Waypoint {
+  // Quaternion orientation
+  double qw = 1;
+  double qx = 2;
+  double qy = 3;
+  double qz = 4;
+  
+  // Position
+  double x = 5;
+  double y = 6;
+  double z = 7;
+}
+
+message MissionDetails {
+  repeated Waypoint waypoints = 1;
+}
+
+message Shadow {
+	SSH_ENABLE sshSetting = 1;
+	float battery = 2;
+	bool inUse = 3;
+	float networkQuality = 4;
+	bool systemOk = 5;
+	bool failSafe = 6;
+	CONTROL_MODE mode = 7;
+
+	bool emergencyButtonPressed = 12;
+
+	MissionSchedule missionSchedule = 13;
+  MissionDetails missionDetails = 14;
+
+  bool mapFound = 15;
+  bool slamRunning = 16;
+  bool cartoRunning = 17;
+  bool navstackRunning = 18;
+  string mapId = 19;
+}
